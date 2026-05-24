@@ -1,0 +1,360 @@
+/* ═══════════════════════════════════════════════════════════════
+   Heima AI Hub — Design Token System
+   Three-layer architecture: Primitive → Semantic → Component
+   Supports light and dark modes via [data-theme] or .dark class
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Layer 1: Primitive Tokens ─────────────────────────────── */
+
+:root {
+  /* Color palette — HSL for opacity control */
+  --hue-blue: 210;
+  --hue-teal: 175;
+  --hue-purple: 275;
+  --hue-green: 140;
+  --hue-red: 0;
+  --hue-amber: 40;
+  --hue-gray: 220;
+
+  /* Blue scale */
+  --palette-blue-50: hsl(210, 100%, 96%);
+  --palette-blue-100: hsl(210, 100%, 88%);
+  --palette-blue-200: hsl(210, 100%, 75%);
+  --palette-blue-400: hsl(210, 100%, 55%);
+  --palette-blue-500: hsl(210, 100%, 48%);
+  --palette-blue-600: hsl(210, 100%, 38%);
+  --palette-blue-700: hsl(210, 100%, 28%);
+  --palette-blue-800: hsl(210, 100%, 18%);
+  --palette-blue-900: hsl(210, 100%, 10%);
+
+  /* Teal scale */
+  --palette-teal-300: hsl(175, 100%, 70%);
+  --palette-teal-400: hsl(175, 100%, 45%);
+
+  /* Purple scale */
+  --palette-purple-100: hsl(275, 100%, 93%);
+  --palette-purple-400: hsl(275, 80%, 55%);
+  --palette-purple-500: hsl(275, 80%, 45%);
+  --palette-purple-600: hsl(275, 70%, 38%);
+
+  /* Green scale */
+  --palette-green-400: hsl(140, 70%, 50%);
+  --palette-green-500: hsl(140, 65%, 42%);
+
+  /* Red scale */
+  --palette-red-100: hsl(0, 85%, 95%);
+  --palette-red-400: hsl(0, 85%, 58%);
+
+  /* Amber scale */
+  --palette-amber-400: hsl(40, 90%, 52%);
+
+  /* Neutral gray scale */
+  --palette-gray-50: hsl(var(--hue-gray), 10%, 97%);
+  --palette-gray-100: hsl(var(--hue-gray), 10%, 93%);
+  --palette-gray-200: hsl(var(--hue-gray), 8%, 85%);
+  --palette-gray-300: hsl(var(--hue-gray), 6%, 70%);
+  --palette-gray-400: hsl(var(--hue-gray), 5%, 55%);
+  --palette-gray-500: hsl(var(--hue-gray), 5%, 42%);
+  --palette-gray-600: hsl(var(--hue-gray), 5%, 32%);
+  --palette-gray-700: hsl(var(--hue-gray), 5%, 22%);
+  --palette-gray-800: hsl(var(--hue-gray), 5%, 15%);
+  --palette-gray-850: hsl(var(--hue-gray), 5%, 12%);
+  --palette-gray-900: hsl(var(--hue-gray), 5%, 8%);
+  --palette-gray-950: hsl(var(--hue-gray), 5%, 5%);
+
+  /* Spacing scale */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-14: 3.5rem;
+  --space-16: 4rem;
+
+  /* Font size scale */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+  --font-4xl: 2.25rem;
+  --font-5xl: 3rem;
+
+  /* Font weight */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Border radius scale */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-full: 9999px;
+
+  /* Shadow scale */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);
+  --shadow-glow-blue: 0 0 20px rgba(0, 124, 240, 0.3);
+  --shadow-glow-purple: 0 0 20px rgba(147, 51, 234, 0.3);
+
+  /* Transition scale */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+
+  /* Z-index scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+}
+
+/* ── Layer 2: Semantic Tokens (Light Mode) ─────────────────── */
+
+:root {
+  /* Brand colors */
+  --color-primary: var(--palette-blue-500);
+  --color-primary-hover: var(--palette-blue-600);
+  --color-primary-light: var(--palette-blue-100);
+  --color-primary-dark: var(--palette-blue-700);
+  --color-secondary: var(--palette-teal-400);
+  --color-accent: var(--palette-purple-500);
+  --color-accent-hover: var(--palette-purple-600);
+  --color-accent-light: var(--palette-purple-100);
+
+  /* Semantic status colors */
+  --color-success: var(--palette-green-400);
+  --color-success-dark: var(--palette-green-500);
+  --color-error: var(--palette-red-400);
+  --color-error-light: var(--palette-red-100);
+  --color-warning: var(--palette-amber-400);
+
+  /* Surface colors */
+  --surface-page: var(--palette-gray-50);
+  --surface-card: rgba(255, 255, 255, 0.95);
+  --surface-sidebar: rgba(255, 255, 255, 0.95);
+  --surface-input: #ffffff;
+  --surface-hover: rgba(0, 0, 0, 0.03);
+  --surface-active: rgba(0, 124, 240, 0.08);
+
+  /* Text colors */
+  --text-primary: var(--palette-gray-800);
+  --text-secondary: var(--palette-gray-500);
+  --text-muted: var(--palette-gray-400);
+  --text-inverse: #ffffff;
+
+  /* Border colors */
+  --border-light: rgba(0, 0, 0, 0.06);
+  --border-default: rgba(0, 0, 0, 0.1);
+  --border-strong: rgba(0, 0, 0, 0.15);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-blur: 12px;
+  --glass-border: rgba(255, 255, 255, 0.2);
+
+  /* Gradients */
+  --gradient-brand: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  --gradient-brand-text: linear-gradient(135deg, #007CF0, #00DFD8);
+  --gradient-purple: linear-gradient(135deg, #9333ea 0%, #c026d3 100%);
+  --gradient-success: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+}
+
+/* ── Layer 2: Semantic Tokens (Dark Mode Overrides) ────────── */
+
+.dark {
+  /* Surface colors */
+  --surface-page: var(--palette-gray-950);
+  --surface-card: rgba(30, 30, 30, 0.95);
+  --surface-sidebar: rgba(30, 30, 30, 0.95);
+  --surface-input: rgba(50, 50, 50, 0.95);
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  --surface-active: rgba(0, 124, 240, 0.15);
+
+  /* Text colors */
+  --text-primary: #ffffff;
+  --text-secondary: var(--palette-gray-300);
+  --text-muted: var(--palette-gray-400);
+
+  /* Border colors */
+  --border-light: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.15);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(30, 30, 30, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Layer 3: Component Tokens ─────────────────────────────── */
+
+:root {
+  /* Button — Primary */
+  --btn-primary-bg: var(--color-primary);
+  --btn-primary-bg-hover: var(--color-primary-hover);
+  --btn-primary-text: var(--text-inverse);
+  --btn-primary-radius: var(--radius-md);
+
+  /* Button — Ghost */
+  --btn-ghost-bg: transparent;
+  --btn-ghost-bg-hover: var(--surface-hover);
+  --btn-ghost-text: var(--text-primary);
+
+  /* Navbar */
+  --navbar-height: 64px;
+  --navbar-bg: rgba(255, 255, 255, 0.72);
+  --navbar-blur: 16px;
+  --navbar-border: rgba(0, 0, 0, 0.06);
+  --navbar-logo-gradient: var(--gradient-brand-text);
+
+  /* Card */
+  --card-bg: var(--surface-card);
+  --card-blur: var(--glass-blur);
+  --card-radius: var(--radius-2xl);
+  --card-shadow: var(--shadow-md);
+  --card-shadow-hover: var(--shadow-lg);
+  --card-border: var(--border-light);
+  --card-padding: var(--space-8);
+
+  /* Chat bubble — User */
+  --chat-user-bg: hsl(210, 100%, 96%);
+  --chat-user-text: var(--palette-gray-800);
+  --chat-user-radius: var(--radius-xl) var(--radius-xl) 0 var(--radius-xl);
+
+  /* Chat bubble — Assistant */
+  --chat-assistant-bg: var(--surface-card);
+  --chat-assistant-text: var(--text-primary);
+  --chat-assistant-radius: var(--radius-xl) var(--radius-xl) var(--radius-xl) 0;
+
+  /* Input */
+  --input-bg: var(--surface-input);
+  --input-border: var(--border-default);
+  --input-border-focus: var(--color-primary);
+  --input-radius: var(--radius-lg);
+  --input-padding: var(--space-3) var(--space-4);
+  --input-shadow-focus: 0 0 0 3px rgba(0, 124, 240, 0.12);
+
+  /* Sidebar */
+  --sidebar-width: 300px;
+  --sidebar-bg: var(--surface-sidebar);
+  --sidebar-blur: var(--glass-blur);
+  --sidebar-radius: var(--radius-xl);
+  --sidebar-shadow: var(--shadow-md);
+
+  /* Scrollbar */
+  --scrollbar-width: 6px;
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: var(--palette-gray-300);
+  --scrollbar-thumb-hover: var(--palette-gray-400);
+
+  /* Tooltip */
+  --tooltip-bg: var(--palette-gray-800);
+  --tooltip-text: #ffffff;
+  --tooltip-radius: var(--radius-md);
+}
+
+/* Dark mode component overrides */
+.dark {
+  --navbar-bg: rgba(10, 10, 10, 0.72);
+  --navbar-border: rgba(255, 255, 255, 0.06);
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.4);
+  --chat-user-bg: hsl(210, 80%, 18%);
+  --chat-user-text: #ffffff;
+  --scrollbar-thumb: var(--palette-gray-600);
+  --scrollbar-thumb-hover: var(--palette-gray-500);
+  --tooltip-bg: var(--palette-gray-200);
+  --tooltip-text: var(--palette-gray-900);
+}
+
+/* ── Global Reset & Base Styles ────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+  font-size: var(--font-base);
+  color: var(--text-primary);
+  background: var(--surface-page);
+  line-height: 1.6;
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+/* ── Scrollbar Styling ─────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* ── Focus Ring ────────────────────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Selection Color ───────────────────────────────────────── */
+
+::selection {
+  background: rgba(0, 124, 240, 0.2);
+  color: inherit;
+}
+
+.dark ::selection {
+  background: rgba(0, 124, 240, 0.3);
+}
+
+/* ── Utility: Screen-reader only ───────────────────────────── */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
