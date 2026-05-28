@@ -155,7 +155,8 @@ import {
   ChatBubbleLeftRightIcon,
   HeartIcon,
   UserGroupIcon,
-  DocumentTextIcon
+  DocumentTextIcon,
+  SparklesIcon
 } from '@heroicons/vue/24/outline'
 
 const showFirst = ref(true)
@@ -478,8 +479,8 @@ onUnmounted(() => {
 const aiApps = [
   {
     id: 1,
-    title: 'AI Chat',
-    description: 'Multimodal conversational agent with vision, audio, and video capabilities',
+    title: 'AI Programming Master',
+    description: 'Your intelligent coding companion — generate, debug, and refactor code in any language',
     route: '/ai-chat',
     icon: ChatBubbleLeftRightIcon,
     iconClass: 'icon-blue'
@@ -507,6 +508,14 @@ const aiApps = [
     route: '/chat-pdf',
     icon: DocumentTextIcon,
     iconClass: 'icon-purple'
+  },
+  {
+    id: 5,
+    title: 'SuperManus',
+    description: 'Your all-capable AI agent — web search, file ops, scraping, and more in one autonomous workflow',
+    route: '/manus',
+    icon: SparklesIcon,
+    iconClass: 'icon-orange'
   }
 ]
 </script>
@@ -745,6 +754,11 @@ const aiApps = [
       background: var(--color-accent-light);
       .icon { color: var(--color-accent); }
     }
+
+    &.icon-orange {
+      background: hsl(30, 80%, 92%);
+      .icon { color: hsl(30, 90%, 50%); }
+    }
   }
 
   .card-title {
@@ -785,6 +799,7 @@ const aiApps = [
     &.icon-red { background: rgba(255, 77, 79, 0.15); }
     &.icon-green { background: rgba(82, 196, 26, 0.15); }
     &.icon-purple { background: rgba(147, 51, 234, 0.15); }
+    &.icon-orange { background: rgba(249, 115, 22, 0.15); }
   }
 }
 

@@ -117,5 +117,24 @@ export const chatAPI = {
       console.error('API Error:', error)
       throw error
     }
+  },
+
+  // Send SuperManus task — SSE streaming endpoint
+  async sendManusMessage(prompt) {
+    try {
+      const response = await fetch(`${BASE_URL}/ai/manus/chat?message=${encodeURIComponent(prompt)}`, {
+        method: 'GET',
+        signal: AbortSignal.timeout(300000)
+      })
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      return response.body.getReader()
+    } catch (error) {
+      console.error('SuperManus API Error:', error)
+      throw error
+    }
   }
 }

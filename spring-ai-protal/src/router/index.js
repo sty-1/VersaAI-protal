@@ -31,6 +31,11 @@ const routes = [
     path: '/game',
     name: 'game',
     component: () => import('../views/GameChat.vue')
+  },
+  {
+    path: '/manus',
+    name: 'SuperManus',
+    component: () => import('../views/SuperManus.vue')
   }
 ]
 

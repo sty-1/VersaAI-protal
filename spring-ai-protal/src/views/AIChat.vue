@@ -37,12 +37,12 @@
             <div class="empty-icon-wrapper">
               <ChatBubbleLeftRightIcon class="empty-icon" aria-hidden="true" />
             </div>
-            <h3>Start a conversation</h3>
-            <p>Send a message or upload files to chat with multimodal AI</p>
+            <h3>Start Coding</h3>
+            <p>Ask anything about programming — generate, debug, and refactor code with AI</p>
             <div class="feature-hints">
-              <span class="hint">Images</span>
-              <span class="hint">Audio</span>
-              <span class="hint">Video</span>
+              <span class="hint">Code Gen</span>
+              <span class="hint">Debug</span>
+              <span class="hint">Refactor</span>
             </div>
           </div>
           <ChatMessage
@@ -233,7 +233,7 @@ const getPlaceholder = () => {
     const type = selectedFiles.value[0].type.split('/')[0]
     return `${selectedFiles.value.length} ${FILE_LIMITS[type].description} selected, continue typing...`
   }
-  return 'Type a message, or upload images, audio, or video...'
+  return 'Ask a coding question, or upload code files to review...'
 }
 
 const sendMessage = async () => {
