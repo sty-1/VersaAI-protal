@@ -38,6 +38,7 @@ export const chatAPI = {
         id,
         title: type === 'pdf' ? `PDF Chat ${id.slice(-6)}` :
                type === 'service' ? `Inquiry ${id.slice(-6)}` :
+               type === 'manus' ? `Task ${id.slice(-6)}` :
                `Chat ${id.slice(-6)}`
       }))
     } catch (error) {
@@ -120,9 +121,13 @@ export const chatAPI = {
   },
 
   // Send SuperManus task — SSE streaming endpoint
-  async sendManusMessage(prompt) {
+  async sendManusMessage(prompt, chatId) {
     try {
-      const response = await fetch(`${BASE_URL}/ai/manus/chat?message=${encodeURIComponent(prompt)}`, {
+      const url = new URL(`${BASE_URL}/ai/manus/chat?message=${encodeURIComponent(prompt)}`)
+      if (chatId) {
+        url.searchParams.append('chatId', chatId)
+      }
+      const response = await fetch(url, {
         method: 'GET',
         signal: AbortSignal.timeout(300000)
       })
