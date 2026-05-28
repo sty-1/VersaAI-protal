@@ -106,6 +106,29 @@
           </template>
         </div>
 
+        <div v-if="isRunning || tokenUsage.step > 0" class="progress-bar" :class="tokenLevel">
+          <div class="progress-row">
+            <span class="progress-label">Step {{ tokenUsage.step }}/{{ tokenUsage.maxSteps }}</span>
+            <div class="progress-track step-track">
+              <div class="progress-fill" :style="{ width: stepPercent + '%' }"></div>
+            </div>
+            <span class="progress-pct">{{ stepPercent }}%</span>
+          </div>
+          <div class="progress-row">
+            <span class="progress-label">Context</span>
+            <div class="progress-track token-track">
+              <div class="progress-fill" :style="{ width: tokenPercent + '%' }"></div>
+            </div>
+            <span class="progress-pct">{{ formatTokens(tokenUsage.tokens) }}/{{ formatTokens(tokenUsage.maxTokens) }} ({{ tokenPercent }}%)</span>
+          </div>
+          <div v-if="tokenLevel === 'critical'" class="progress-warning">
+            Context nearly full — summarizing soon
+          </div>
+          <div v-else-if="tokenLevel === 'warn'" class="progress-warning">
+            Context usage high — approaching limit
+          </div>
+        </div>
+
         <div class="input-area">
           <div class="input-row">
             <textarea ref="inputRef" v-model="userInput" class="task-input"
@@ -127,7 +150,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import {
   SparklesIcon, PaperAirplaneIcon, StopIcon, PlusIcon,
   WrenchScrewdriverIcon, CheckCircleIcon, ExclamationCircleIcon, ArrowDownTrayIcon
@@ -147,7 +170,25 @@ const inputRef = ref(null)
 const messagesRef = ref(null)
 const currentChatId = ref(null)
 const chatHistory = ref([])
+const tokenUsage = ref({ step: 0, maxSteps: 20, tokens: 0, maxTokens: 128000 })
 let abortController = null
+
+const tokenPercent = computed(() => {
+  const pct = Math.round((tokenUsage.value.tokens / tokenUsage.value.maxTokens) * 100)
+  return Math.min(pct, 100)
+})
+const stepPercent = computed(() => {
+  return Math.round((tokenUsage.value.step / tokenUsage.value.maxSteps) * 100)
+})
+const tokenLevel = computed(() => {
+  if (tokenPercent.value >= 90) return 'critical'
+  if (tokenPercent.value >= 70) return 'warn'
+  return 'normal'
+})
+const formatTokens = (n) => {
+  if (n >= 1000) return (n / 1000).toFixed(0) + 'K'
+  return String(n)
+}
 
 const renderMd = (text) => {
   if (!text) return ''
@@ -202,7 +243,16 @@ const handleEvent = (evt) => {
       removeLastThinking()
       timeline.value.push({ role: 'assistant', type: 'error', content: evt.content || 'Unknown error' })
       break
+    case 'token_usage':
+      tokenUsage.value = {
+        step: evt.step || 0,
+        maxSteps: evt.maxSteps || 20,
+        tokens: evt.tokens || 0,
+        maxTokens: evt.maxTokens || 128000
+      }
+      break
   }
+  scrollToBottom()
 }
 
 const removeLastThinking = () => {
@@ -299,6 +349,7 @@ const startNewTask = () => {
   const newChatId = Date.now().toString()
   currentChatId.value = newChatId
   timeline.value = []
+  tokenUsage.value = { step: 0, maxSteps: 20, tokens: 0, maxTokens: 128000 }
   const newChat = { id: newChatId, title: `Task ${newChatId.slice(-6)}` }
   chatHistory.value = [newChat, ...chatHistory.value]
 }
@@ -528,6 +579,39 @@ onUnmounted(() => { if (abortController) abortController.abort() })
 .tool-call-card { border-left: 3px solid hsl(30, 90%, 50%); .call-icon { color: hsl(30, 90%, 50%); } }
 .tool-result-card { border-left: 3px solid var(--color-success); .result-icon { color: var(--color-success); } }
 .tool-error-card { border-left: 3px solid var(--color-error); .error-icon { color: var(--color-error); } }
+
+/* ── Progress bar ─────────────────────────────── */
+.progress-bar {
+  margin: 0 var(--space-6); padding: var(--space-3) var(--space-4);
+  background: var(--surface-page); border: 1px solid var(--card-border);
+  border-radius: var(--radius-lg); transition: border-color 0.3s;
+
+  &.warn { border-color: hsl(40, 90%, 52%); }
+  &.critical { border-color: var(--color-error); animation: pulseBorder 2s ease-in-out infinite; }
+
+  .progress-row {
+    display: flex; align-items: center; gap: var(--space-2); font-size: var(--font-xs);
+    &:first-child { margin-bottom: var(--space-1); }
+  }
+  .progress-label { width: 56px; flex-shrink: 0; color: var(--text-muted); text-align: right; }
+  .progress-pct { width: 110px; flex-shrink: 0; color: var(--text-secondary); text-align: right; font-variant-numeric: tabular-nums; }
+  .progress-track {
+    flex: 1; height: 6px; border-radius: 3px; background: var(--surface-hover); overflow: hidden;
+    .progress-fill { height: 100%; border-radius: 3px; transition: width 0.5s ease-out; }
+  }
+  .step-track .progress-fill { background: var(--color-primary); }
+  .token-track .progress-fill { background: var(--color-success); }
+  &.warn .token-track .progress-fill { background: hsl(40, 90%, 52%); }
+  &.critical .token-track .progress-fill { background: var(--color-error); }
+
+  .progress-warning {
+    margin-top: var(--space-2); font-size: var(--font-xs); text-align: center; font-weight: var(--font-medium);
+    .warn & { color: hsl(40, 85%, 45%); }
+    .critical & { color: var(--color-error); }
+  }
+}
+@keyframes pulseBorder { 0%,100%{border-color:var(--color-error)} 50%{border-color:rgba(255,77,79,.3)} }
+
 .input-area { flex-shrink: 0; padding: var(--space-4) var(--space-6) var(--space-5); border-top: 1px solid var(--card-border); background: var(--surface-card);
   .input-row { display: flex; gap: var(--space-3); align-items: flex-end; }
   .task-input { flex: 1; padding: var(--space-3) var(--space-4); border: 1px solid var(--card-border); border-radius: var(--radius-xl); background: var(--card-bg); color: var(--text-primary); font-size: var(--font-sm); font-family: inherit; line-height: 1.6; resize: none; outline: none; max-height: 160px; transition: border-color var(--transition-base); &:focus { border-color: hsl(30, 90%, 50%); } &::placeholder { color: var(--text-muted); } &:disabled { opacity: 0.5; cursor: not-allowed; } }
